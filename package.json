@@ -1,0 +1,27 @@
+{
+  "name": "grx",
+  "version": "1.0.0",
+  "description": "Rx from scratch",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -r ts-node/register tests/Observable.spec.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/georgebatalinski/grx.git"
+  },
+  "author": "Jerzy Batalinski",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/georgebatalinski/grx/issues"
+  },
+  "homepage": "https://github.com/georgebatalinski/grx#readme",
+  "devDependencies": {
+    "@types/chai": "^3.4.34",
+    "@types/mocha": "^2.2.38",
+    "chai": "^3.5.0",
+    "mocha": "^3.2.0",
+    "ts-node": "^2.0.0",
+    "typescript": "^2.1.5"
+  }
+}
