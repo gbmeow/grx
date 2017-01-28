@@ -2,7 +2,7 @@
   "name": "grx",
   "version": "1.0.0",
   "description": "Rx from scratch",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "mocha -r ts-node/register tests/Observable.spec.ts"
   },
@@ -23,5 +23,9 @@
     "mocha": "^3.2.0",
     "ts-node": "^2.0.0",
     "typescript": "^2.1.5"
-  }
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {}
 }
