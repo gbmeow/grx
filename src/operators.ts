@@ -1,13 +1,44 @@
-import { GStream } from './Observable';
+import { Stream, Listner } from './Observable';
 import { subscribe  } from '../src/Subscribe';
 
-type MapFn = <T, R>( a: T ) => R;
+//operators
 
-export function map( fn: MapFn, stream: GStream):GStream {
-    return function( atSubscribe ):void {
-        subscribe( (result) => {
-            atSubscribe( fn( result ) );
-        }, stream);
+
+export function map<T, R>( predicate: (value: T) => R, stream: Stream<T> ):Stream<T> {
+        let res = [];
+        stream.subscribe( <T>(result:T) => {
+            res.push(result);
+        });
+        return new Stream( new Map( predicate, res) );
+
+}
+
+
+export function fromArray( values ) {
+    return new Stream( new FromArray( values ) ); 
+}
+
+
+export class FromArray<T> {
+    constructor( private values: T[]) {}
+    run(listner: Listner<T>) {
+        this.values.forEach( listner.next );
     }
 }
- 
+
+export class PushArray<T> {
+    constructor( private values: T) {}
+    run(listner: Listner<T>) {
+        listner.next( this.values );
+    }
+}
+
+export class Map<T> {
+    constructor( private valueFn: any, private vals: any) {}
+    run(listner: Listner<T>) {
+        this.vals.forEach( (x)=> {
+            listner.next( this.valueFn(x) ) 
+        });
+    }
+}
+

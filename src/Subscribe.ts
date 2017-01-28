@@ -1,5 +1,15 @@
-import { GStream } from './Observable';
+import { Stream, Listner } from './Observable';
 
-export function subscribe( atSubscribe: Function, stream: GStream ) :void {
-    stream( atSubscribe );
+export function subscribe<T>( atSubscribe: (value: T) => any, stream: Stream<T> ): void {
+    const listener: Listner<T> = {
+        next: atSubscribe,
+        error: (err: Error) => {
+            console.log(err);
+        },
+        complete() {
+            console.log('complete');
+        }
+    }
+
+    const disposable = stream.source.run(listener);
 }
