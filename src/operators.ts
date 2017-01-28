@@ -1,12 +1,9 @@
 import { Stream, Listner } from './Observable';
 import { subscribe  } from '../src/Subscribe';
 
-//operators
-
-
 export function map<T, R>( predicate: (value: T) => R, stream: Stream<T> ):Stream<T> {
         let res = [];
-        stream.subscribe( <T>(result:T) => {
+        stream.subscribe( (result:any) => {
             res.push(result);
         });
         return new Stream( new Map( predicate, res) );

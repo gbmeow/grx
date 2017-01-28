@@ -16,13 +16,13 @@ export class Stream<T> {
         let y = [];
         let indexX = 0;
         let indexY = 0;
-        this.subscribe(( y )=> {
+        this.subscribe(( y:any )=> {
             x.push( y );
         });
-        stream.subscribe(( x )=> {
+        stream.subscribe(( x:any )=> {
             y.push( x );
         });
-        return new Stream(  new PushArray( combineFn(<any>x[indexX++], <any>y[indexY++]) ) );
+        return new Stream(  new PushArray( combineFn(x[indexX++], y[indexY++]) ) );
     }
 }
 
@@ -31,8 +31,8 @@ export interface Source<T> {
 }
 
 export interface Listner<T>{
-    next: (val) => void;
-    error: (val) => void;
+    next: (val:any) => void;
+    error: (val:Error) => void;
     complete: () => void;
 }
 
