@@ -2,7 +2,7 @@ import { Stream, Listner } from './Observable';
 import { subscribe  } from '../src/Subscribe';
 
 export function map<T, R>( predicate: (value: T) => R, stream: Stream<T> ):Stream<T> {
-        let res = [];
+        let res:Array<any> = [];
         stream.subscribe( (result:any) => {
             res.push(result);
         });

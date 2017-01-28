@@ -12,10 +12,10 @@ export class Stream<T> {
     }
 
     combineLatest<T, D, R>( combineFn: (x:T, y: R) => D, stream: Stream<T> ): Stream<R> {
-        let x = [];
-        let y = [];
-        let indexX = 0;
-        let indexY = 0;
+        let x:Array<any> = [];
+        let y:Array<any> = [];
+        let indexX:number = 0;
+        let indexY:number = 0;
         this.subscribe(( y:any )=> {
             x.push( y );
         });
