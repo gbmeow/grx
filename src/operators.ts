@@ -11,7 +11,7 @@ export function map<T, R>( predicate: (value: T) => R, stream: Stream<T> ):Strea
 }
 
 
-export function fromArray( values ) {
+export function fromArray( values:any ) {
     return new Stream( new FromArray( values ) ); 
 }
 
@@ -33,7 +33,7 @@ export class PushArray<T> {
 export class Map<T> {
     constructor( private valueFn: any, private vals: any) {}
     run(listner: Listner<T>) {
-        this.vals.forEach( (x)=> {
+        this.vals.forEach( (x:any)=> {
             listner.next( this.valueFn(x) ) 
         });
     }
