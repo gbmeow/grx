@@ -1,15 +1,11 @@
-import { Stream, Listner } from './Observable';
+import { Stream, Listner, nonReturn, defaultError, defaultComplete} from './Observable';
 
-export function subscribe<T>( atSubscribe: (value: T) => any, stream: Stream<T> ): void {
-    const listener: Listner<T> = {
-        next: atSubscribe,
-        error: (err: Error) => {
-            console.log(err);
-        },
-        complete() {
-            console.log('complete');
-        }
-    }
 
+export function subscribe<T>( 
+    next: nonReturn,
+    error: nonReturn = defaultError,
+    complete: nonReturn = defaultComplete,
+    stream: Stream<T> ): void {
+    const listener: Listner<T> = {next, error, complete}
     const disposable = stream.source.run(listener);
 }

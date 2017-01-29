@@ -47,4 +47,17 @@ describe('Observable function', () => {
     })
   });
 
+  it('should take #', (done) => {
+    const input = [1, 2, 3, 4, 5, 6]
+    const expected = input.slice(0, input.length -1);
+    const stream = fromArray(input);
+    
+    stream.take(5).subscribe(
+      (x) => { expect(x).to.be.equal(expected.shift())}, 
+      (error) => console.log(error), 
+      ()=> done()
+    );
+
+  });
+
 });
