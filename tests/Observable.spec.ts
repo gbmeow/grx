@@ -1,5 +1,5 @@
 //import { Stream, fromArray } from '../src/Observable';
-import { fromArray } from '../src/operators';
+import { fromArray, interval } from '../src/operators';
 import { subscribe } from '../src/Subscribe';
 
 import { expect } from 'chai';
@@ -57,7 +57,6 @@ describe('Observable function', () => {
       (error) => console.log(error), 
       ()=> done()
     );
-
   });
 
   it('should should error take i < 0', (done) => {
@@ -72,6 +71,22 @@ describe('Observable function', () => {
       ()=> console.log( ' never completes ')
     );
 
+  });
+
+  it('should do an interval', (done) => {
+    const stream = interval( 200 );
+    let counter = 0; //2000ms per test = 200 * 10 
+    let iterations = 2;
+    stream.take( iterations ).subscribe(
+      (x) => { 
+        expect(true).to.be.equal(true);
+        ++counter;
+        if( counter === iterations )
+          done();
+      }, 
+      (error) => console.log(error), 
+      ()=> console.log( ' should never complete '),
+    );
   });
 
 });
