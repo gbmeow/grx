@@ -1,6 +1,13 @@
 import { subscribe } from './Subscribe';
 import { map, PushArray, take } from './operators';
 
+//contracts
+//map() -> Stream<T> --- Reason: You give values -> you get result
+//take() -> Stream<T> --- 
+        //However: Internally - it is subscribed to previous stream
+        //Reason: We need to manage the values, as they arrive 
+        //from previous stream 
+        //and take() - requires that the values are passed through as they arrive
 
 export const defaultError = (val:Error) => {};
 export const defaultComplete = ()=> {};
