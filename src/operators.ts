@@ -26,6 +26,10 @@ export class Take<T> {
     private listner: Listner<T>;
     constructor( private values: T[], private numTake: number) {}
     run(listner: Listner<T>) {
+        if( this.numTake < 0) {
+            listner.error( new Error( 'numTake should be greater then 0') );
+            return;
+        }
         this.listner = listner;
         let counter = 0;
         while( counter < this.numTake ) {
