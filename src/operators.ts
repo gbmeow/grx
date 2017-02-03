@@ -21,9 +21,17 @@ export class Interval<T> implements Source<T> {
     constructor( private tickMs: number ) {}
     run(listner: Listner<T>) {
         this.listner = listner;
+        if( this.tickMs > 1000000 ) {
+            this.error( new Error(' dude you will kill browser ') );  
+        }
+        
+        let counter = 0;
         this.intervalId = setInterval(()=> {
-            listner.next( this.tickMs );
+            listner.next( counter++ );
         }, this.tickMs);
+    }
+    error( err: Error ) {
+        this.listner.error( new Error() );
     }
     complete() {
         clearInterval( this.intervalId );
@@ -90,6 +98,46 @@ export class Map<T> {
         this.vals.forEach( (x:any)=> {
             listner.next( this.valueFn(x) ) 
         });
+    }
+}
+
+
+export function multicast<T>( stream:Stream<T> ) {
+    return new Stream( new Multicast( stream ) ); 
+}
+
+// stream.subscribe() -> stream.source.run() ->  
+export class Multicast<T> implements Source<T> {
+    private listners: Listner<T>[];
+    private count: number;
+    constructor( private original: Stream<T>  ) {
+        this.listners = [];
+        this.count = 0;
+    }
+    run(listner: Listner<T>) {
+        this.add ( listner );
+        if( this.count === 1)
+            //this is really clever 
+                //this = subscribe() 
+            this.original.source.run( this );
+        this.count++;
+        //this.original.source && this.source disposable
+    }
+
+    next( val: any ): void  {
+        const listners = this.listners;
+        listners.forEach( ( l: Listner<T>  )=> l.next( val )  ); 
+    }
+
+    add( listner: Listner<T>  ) {
+        this.listners = this.listners.concat( listner );
+        return this.listners.length;
+    }
+    error(err: Error) {
+        this.listners.forEach( ( l: Listner<T>  )=> l.error( err )  );
+    }
+    complete() {
+        this.listners.forEach( ( l: Listner<T>  )=> l.complete()  );
     }
 }
 

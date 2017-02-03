@@ -1,14 +1,6 @@
 import { subscribe } from './Subscribe';
 import { map, PushArray, take } from './operators';
 
-//contracts
-//map() -> Stream<T> --- Reason: You give values -> you get result
-//take() -> Stream<T> --- 
-        //However: Internally - it is subscribed to previous stream
-        //Reason: We need to manage the values, as they arrive 
-        //from previous stream 
-        //and take() - requires that the values are passed through as they arrive
-
 export const defaultError = (val:Error) => {};
 export const defaultComplete = ()=> {};
 export type nonReturn = <T>( value?: T)=> void;
@@ -19,7 +11,7 @@ export class Stream<T> {
                 error: nonReturn = defaultError,
                 complete: nonReturn = defaultComplete) {
         
-        subscribe( next, error, complete, this );
+        return subscribe( next, error, complete, this );
     } 
 
     map<T,R>( project: any  ):Stream<T>  {
@@ -37,12 +29,15 @@ export class Stream<T> {
         let indexY:number = 0;
         this.subscribe(
             ( y:any )=> { x.push( y ) }
-        
         );
         stream.subscribe(( x:any )=> {
             y.push( x );
         });
         return new Stream(  new PushArray( combineFn(x[indexX++], y[indexY++]) ) );
+    }
+
+    complete() {
+        this.source.complete();
     }
 }
 

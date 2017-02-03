@@ -1,5 +1,5 @@
 //import { Stream, fromArray } from '../src/Observable';
-import { fromArray, interval } from '../src/operators';
+import { fromArray, interval, multicast } from '../src/operators';
 import { subscribe } from '../src/Subscribe';
 
 import { expect } from 'chai';
@@ -73,6 +73,8 @@ describe('Observable function', () => {
 
   });
 
+
+describe('.interval()',()=> {
   it('should do an interval', (done) => {
     const stream = interval( 200 );
     let counter = 0; //2000ms per test = 200 * 10 
@@ -85,8 +87,87 @@ describe('Observable function', () => {
           done();
       }, 
       (error) => console.log(error), 
-      ()=> console.log( ' should never complete '),
+      ()=> {},
     );
   });
+
+    it('should dispose an interval', (done) => {
+      const stream = interval( 200 );
+      let counter = 0; //2000ms per test = 200 * 10 
+      let iterations = 2;
+
+      const dispose = stream.subscribe(
+        (x) => { }, 
+        (error) => console.log(error), 
+        ()=> done()
+      );
+
+      dispose.dispose();
+
+   });
+
+    it('should error in flight ', (done) => {
+      const stream = interval( 1000001 );
+      let counter = 0; //2000ms per test = 200 * 10 
+      let iterations = 2;
+
+      const dispose = stream.subscribe(
+        (x)=>{}, 
+        (error)=>done(), 
+        ()=>{}
+      );
+
+   });
+
+});
+
+
+describe('.multicast()',()=> {
+  it('should multicast', (done) => {
+    const stream = multicast( interval( 200 ) );
+    let counter = 0; //2000ms per test = 200 * 10 
+    let iterations = 5;
+
+    stream.subscribe(
+      (x) => { 
+        //expect( x ).to.be.equal( counter++ );
+        ++counter;
+        if( counter === iterations )
+          done();
+      }, 
+      (error) => console.log(error), 
+      ()=> console.log( ' complete '),
+    );
+
+    stream.subscribe(
+      (x) => { 
+        //expect( x ).to.be.equal( counter++ );
+        ++counter;
+        if( counter === iterations )
+          done();
+      }, 
+      (error) => console.log(error), 
+      ()=> console.log( ' complete '),
+    );
+
+
+  });
+
+  it('should dispose of multicast', (done) => {
+    const stream = multicast( interval( 200 ) );
+    let counter = 0; //2000ms per test = 200 * 10 
+    let iterations = 5;
+
+    const dispose = stream.subscribe(
+      (x) => {}, 
+      (error) => console.log(error), 
+      ()=> done() 
+    );
+
+    dispose.dispose();
+
+  });
+
+});
 
 });
