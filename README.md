@@ -19,6 +19,9 @@
 [ x ] add Multicast 
 [   ] add MulticastDisposable()
 
+[   ] Replay subject 
+    https://github.com/mostjs-community/subject/blob/master/src/sources/HoldSubjectSource.ts
+
 [] opertors 
     //switchMap 
     //join - flatMap
